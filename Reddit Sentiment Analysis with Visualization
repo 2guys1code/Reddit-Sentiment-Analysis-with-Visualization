@@ -1,0 +1,226 @@
+# -------------------------------------------------------------------------------
+# Name: main.py
+# Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. 
+#
+# Author(s):    David & Dean
+#
+# Created:      24/12/2021
+# Updated:
+# Update Comment(s):
+#
+# TO DO: Visualization + Enable more user-friendly date input, instead of Unix
+# 
+#
+# -------------------------------------------------------------------------------
+
+
+
+
+import pandas as pd
+from pandas_datareader import data
+import requests
+import praw
+import time
+import matplotlib.pyplot as plt
+import numpy as np
+import datetime as dt
+import json
+from psaw import PushshiftAPI
+
+
+# the access below can be used as such, for how it works to access Reddits API see https://towardsdatascience.com/how-to-use-the-reddit-api-in-python-5e05ddfd1e5c
+reddit = praw.Reddit(client_id="CrQ_9ehJvllTe8UZb6Or2g",
+                    client_secret="PVEFYYeJOiDA81ije3PVmejTh0H7Sw",
+                    redirect_uri="http://localhost:8080", password="Thispasswordverysafe900",
+                    user_agent="osx:com.ourhsgproject (by /u/twogusonecode)", username="twoguysonecode")
+                    
+# PSAW: Python Pushshift.io API Wrapper (for comment/submission search); see https://psaw.readthedocs.io/en/latest/
+api = PushshiftAPI()
+
+# list for df conversion
+_posts = []
+
+# list for search parameters (parameters according to PRAW & PSAW submission search; see https://github.com/pushshift/api)
+parameters = []
+
+# choose, for which term you are looking. For example "GME".
+parameters.append(input("Please enter stock ticker. For example GME: "))
+
+# choose the subreddit you want to scrape. For example "Superstonk".
+parameters.append(input('Please enter subreddit. For example Superstonk: '))                                         
+
+# input is needed for the if/else statement, depending if you wand to look for older
+# posts and have to specify a date, or if you want to see the newest submissions
+new_or_old = input("Enter yes to input a start and end date or no to show new posts: ")       
+
+if new_or_old == "yes":
+    #convenient to use:  https://www.unixtimestamp.com/index.php
+    parameters.append(input("Start date as Unix time format. 22.12.21 would be 1640127600: "))
+    parameters.append(input("End date as Unix time format. 23.12.21 would be 1640214000: "))
+else:
+    #if you put in "no" before, this will yield the whole time frame. The posts are automatically sorted from newest to oldest.
+    parameters.append(int(0))                    
+    parameters.append(int(time.time())) #gives current time
+
+print('\033[1m' + 'Please wait. This takes a few seconds.' + '\033[0m')
+print("Extracting the Reddit posts (Default=100).")
+
+# return 100 posts from wallstreetbets (within your specified timeframe or simply newest submissions)
+# api.search_submissions: https://psaw.readthedocs.io/en/latest/
+# parameters: https://github.com/pushshift/api
+# the inputs that have been stored in our list are now accessed
+new_bets = api.search_submissions(q=parameters[0], 
+                                  subreddit=parameters[1],
+                                  after=parameters[2], 
+                                  before=parameters[3],
+                                  limit=100)  # limit set to 100 for times sake, feel free to adjust
+
+# return the important attributes (special thanks to https://www.atoti.io/reddit-data-analytics-trilogy-1-data-scraping-with-praw/)
+# if you want to include not only the title but also the text of the submissions, use post.selftext but keep in mind that many posts have a title only.
+for post in new_bets: 
+    _posts.append([
+            post.author,
+            post.subreddit,
+            post.title,
+            post.score,
+            post.created,
+    ]
+)
+        
+    
+
+    # create a dataframe
+_posts = pd.DataFrame(
+    _posts, columns=[
+        "author",
+        "subreddit",
+        "title",
+        "score",
+        "created",
+    ]
+)
+
+# convert Unix time format
+_posts["created"] = pd.to_datetime(_posts["created"], unit="s")
+_posts["created date"] = pd.to_datetime(_posts["created"], unit="s").dt.date
+_posts["created time"] = pd.to_datetime(_posts["created"], unit="s").dt.time
+
+#save a csv-file with your output.
+_posts.to_csv('reddit_data.csv', index=False, encoding='utf-8')
+
+#_posts.head()
+
+# -------------- FLAIR -------------------------------------------
+# Flair is a Natural Language Processor, see https://github.com/flairNLP/flair and tries to decide wether statements are positive or negative
+# how to use it: https://rubikscode.net/2021/09/13/nlp-tutorial-with-flair-python-sota-nlp-results-in-5-minutes/
+# thanks for the inputs on https://stackoverflow.com/questions/66824999/adding-sign-to-negative-flair-sentiment-analysis
+
+import flair
+from flair.models import TextClassifier
+from flair.data import Sentence
+
+flair_sentiment = flair.models.TextClassifier.load('en-sentiment')
+
+# list for df conversion
+sentiment=[]
+
+# Iterate over the rows of one or multiple columns of the dataframe that we created above
+for index,row in _posts.iterrows():
+    s = flair.data.Sentence(row["title"])  # Retrieve title of post
+    flair_sentiment.predict(s)  # Predict sentiment
+    total_sentiment = s.labels  # get the labels of the sentiment predicted
+    sentiment.append(total_sentiment)  # add to our list
+
+
+# convert to df
+dfsentiment = pd.DataFrame(sentiment, columns = ["Sentiment"])
+# create a csv file with sentiments only
+dfsentiment.to_csv("subreddit_data_sentiment.csv", index=False, encoding="utf-8")
+
+# concatenate the two dataframes with reddit data and flair data
+frames = [dfsentiment, _posts]
+result = pd.concat(frames, axis=1)  # axis = 1 important as otherwise the two df-indices won't allign, this would result in an error
+
+#result.head()
+
+# sentiment data from flair with timestamp of the submissions
+timed_sentiment = pd.DataFrame(result, columns = ["Sentiment", "created"])
+#timed_sentiment.head()
+
+# create a csv file with sentiments and timestamp
+timed_sentiment.to_csv("timed_data_sentiment.csv", index=False, encoding="utf-8")
+
+print("The .csv-Files have been created and stored locally.")
+
+
+# -------------- Stock Prices -------------------------------
+
+start = pd.to_datetime('2020-01-01')
+end = pd.to_datetime('2020-01-31')
+
+gme = data.DataReader('GME', 'yahoo', start, end)
+gme.to_csv('GME_Stocks.csv')
+
+# ---------------Visualization--------------------------------
+
+## processing data for plotting 
+timed_sentiment["Sentiment"] = timed_sentiment["Sentiment"].astype(str) #converting the column sentiment into str
+timed_sentiment[['Sentiment','numbers']] = timed_sentiment['Sentiment'].str.split(' ',expand=True) #splitting up the numbers and Sentiment
+timed_sentiment=timed_sentiment.replace('\(','',regex=True).astype(str) #deleting special characters
+timed_sentiment=timed_sentiment.replace('\)','',regex=True).astype(str) #deleting special characters
+timed_sentiment=timed_sentiment.replace('POSITIVE','+',regex=True).astype(str) #replacing text with operator
+timed_sentiment=timed_sentiment.replace('NEGATIVE','-',regex=True).astype(str) #replacing text with operator
+timed_sentiment["numbers with op"] = timed_sentiment["Sentiment"] + timed_sentiment["numbers"] #putting operator and number together
+timed_sentiment['numbers with op'] = timed_sentiment['numbers with op'].astype(float) #converting column numbers woth op to float
+del timed_sentiment["Sentiment"] #deleting no longer needed column Sentiment
+del timed_sentiment["numbers"] #deleting no longer needed column numbers
+timed_sentiment.head()
+
+print("The scatterplot below shows the sentiment score of the extracted Reddit posts.")
+
+## Plotting
+
+# x axis values
+x = timed_sentiment["created"]
+# corresponding y axis values
+y = timed_sentiment["numbers with op"]
+    
+# plotting the points
+plt.scatter(x, y)
+
+# naming the x axis
+plt.xlabel('Dates')
+
+# naming the y axis
+plt.ylabel('Sentiment Score')
+ 
+# giving a title to my graph
+plt.title('Sentiment Analysis')
+
+# function to show the plot
+plt.show()
+
+
+print("This second graph shows the same data in a different plot.")
+
+
+#Second plot
+#Figure Size
+fig = plt.figure(figsize=(20, 5))
+
+ax2 = fig.add_subplot(122)
+
+ax2.plot(y, color='black')
+
+# naming both axis
+ax2.set_xlabel('Number of Reddit Posts Extracted')
+ax2.set_ylabel('Sentiment Score')
+
+# giving the title
+ax2.set_title('Sentiment Analysis')
+
+# setting the number of ticks shown
+ax2.set_xticks(np.arange(0, len(x)+1, 25))
+
+
+plt.show()
