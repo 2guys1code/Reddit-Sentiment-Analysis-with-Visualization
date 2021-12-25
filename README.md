@@ -2,7 +2,7 @@
 
 ## What it does
 
-This program extracts user posts submitted on the social media plattform Reddit. After it pulls the data, a sentiment analysis using flair 
+This program extracts user posts submitted on the social media platform Reddit. After it pulls the data, a sentiment analysis using flair 
 determines the sentiment score of the individual posts. The results are stored in .csv-Files locally and a graphical illustration is shown to the user. 
 
 Furthermore, the program lets the user select the search term, the subbreddit wished to search on, and a date range. 
