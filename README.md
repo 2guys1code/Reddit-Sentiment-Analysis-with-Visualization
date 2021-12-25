@@ -19,3 +19,5 @@ Reddit-Sentiment-Analysis-withVisualization.py
 The program stores the output in .csv-Files locally.
 >The .csv-Files have been created and stored locally.
 
+
+<img width="1125" alt="Reddit Data Sample" src="https://user-images.githubusercontent.com/94754510/147390354-9ebcf931-137a-4a50-8e13-d042964103c6.png">
