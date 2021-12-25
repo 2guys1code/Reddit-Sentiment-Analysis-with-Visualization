@@ -40,4 +40,9 @@ The two graphics look like this:
 
 ## Data
 
-The data is extracted from Reddit and its selected subreddit. To do this, the program uses the API from https://pushshift.io. 
+The data is extracted from Reddit and its selected subreddit. 
+To do this, the program uses the API from https://pushshift.io. 
+
+## Contributors
+
+This program is written by *amileaminute* (Real Name & Immat. Nr. ) and *CookieMonster* (Real Name & Immat. Nr. ). 
