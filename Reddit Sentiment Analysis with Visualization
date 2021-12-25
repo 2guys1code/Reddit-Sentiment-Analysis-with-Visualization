@@ -203,8 +203,8 @@ plt.show()
 
 print("This second graph shows the same data in a different plot.")
 
-
 #Second plot
+
 #Figure Size
 fig = plt.figure(figsize=(20, 5))
 
@@ -222,5 +222,5 @@ ax2.set_title('Sentiment Analysis')
 # setting the number of ticks shown
 ax2.set_xticks(np.arange(0, len(x)+1, 25))
 
-
+# function to show the second plot
 plt.show()
