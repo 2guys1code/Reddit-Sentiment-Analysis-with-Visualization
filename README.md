@@ -18,7 +18,7 @@ For further documentation, please view the file.
 
 
 ```
-Reddit-Sentiment-Analysis-withVisualization.py
+Reddit-Sentiment-Analysis-with-Visualization.py
 ```
 
 ## Sample Output:
