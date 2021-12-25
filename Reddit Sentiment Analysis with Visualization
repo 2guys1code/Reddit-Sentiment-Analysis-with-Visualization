@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------------------
-# Name: main.py
+# Name: Reddit-Sentiment-Analysis-withVisualization.py
 # Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. 
 #
 # Author(s):    David & Dean
