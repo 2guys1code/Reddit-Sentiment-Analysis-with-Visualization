@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------
-# Name: Reddit-Sentiment-Analysis-withVisualization.py
-# Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. Renders a graphical illustration.
+# Name: Reddit-Sentiment-Analysis-with-Visualization.py
+# Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. 
 #
 # Author(s):    David & Dean
 #
@@ -12,8 +12,6 @@
 # 
 #
 # -------------------------------------------------------------------------------
-
-
 
 
 import pandas as pd
@@ -44,7 +42,7 @@ _posts = []
 parameters = []
 
 # choose, for which term you are looking. For example "GME".
-parameters.append(input("Please enter stock ticker. For example GME: "))
+parameters.append(input("Please enter the search term. For example GME: "))
 
 # choose the subreddit you want to scrape. For example "Superstonk".
 parameters.append(input('Please enter subreddit. For example Superstonk: '))                                         
@@ -152,14 +150,6 @@ timed_sentiment.to_csv("timed_data_sentiment.csv", index=False, encoding="utf-8"
 
 print("The .csv-Files have been created and stored locally.")
 
-
-# -------------- Stock Prices -------------------------------
-
-start = pd.to_datetime('2020-01-01')
-end = pd.to_datetime('2020-01-31')
-
-gme = data.DataReader('GME', 'yahoo', start, end)
-gme.to_csv('GME_Stocks.csv')
 
 # ---------------Visualization--------------------------------
 
