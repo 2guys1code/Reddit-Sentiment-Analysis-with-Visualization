@@ -6,7 +6,7 @@ This program extracts user posts submitted on the social media plattform Reddit.
 determines the sentiment score of the individual posts. The results are stored in .csv-Files locally and a graphical illustration is shown to the user. 
 
 Furthermore, the program lets the user select the search term, the subbreddit wished to search on, and a date range. 
->Please enter stock ticker. For example GME:
+>Please enter the search term. For example GME:
 >
 >Please enter subreddit. For example Superstonk:
 >
