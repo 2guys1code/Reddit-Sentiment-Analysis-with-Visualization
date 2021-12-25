@@ -1,6 +1,6 @@
 # -------------------------------------------------------------------------------
 # Name: Reddit-Sentiment-Analysis-withVisualization.py
-# Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. 
+# Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. Renders a graphical illustration.
 #
 # Author(s):    David & Dean
 #
