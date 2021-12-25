@@ -47,4 +47,6 @@ To do this, the program uses the API from https://pushshift.io.
 ## Contributors
 
 Group ID: 1118
+
+
 This program is written by *amileaminute* (David Probst, 17-609-546) and *CookieMonster* (Dean Vukovic, 16-620-544) for the course 7,789 | 8,789: Skills: Programming with Advanced Computer Language by Dr. Mario. Silic.
