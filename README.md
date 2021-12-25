@@ -16,3 +16,6 @@ Reddit-Sentiment-Analysis-withVisualization.py
 
 ## Sample Output:
 
+The program stores the output in .csv-Files locally.
+>The .csv-Files have been created and stored locally.
+
