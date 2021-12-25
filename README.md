@@ -38,3 +38,6 @@ The two graphics look like this:
 
 <img width="711" alt="Reddit Sentiment Plots" src="https://user-images.githubusercontent.com/94754510/147390505-5a01e34e-ea06-477d-a1d8-f50dc9fe5f32.png">
 
+## Data
+
+The data is extracted from Reddit and its selected subreddit. To do this, the program uses the API from https://pushshift.io. 
