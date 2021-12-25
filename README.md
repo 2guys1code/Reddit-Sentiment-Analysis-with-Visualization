@@ -12,6 +12,7 @@ Furthermore, the program lets the user select the search term, the subbreddit wi
 >
 >Enter yes to input a start and end date or no to show new posts: 
 
+For further documentation, please view the file.
 
 # How to run:
 
