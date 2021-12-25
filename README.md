@@ -10,4 +10,4 @@ The number of posts extracted are set per default to 100, but can be changed up 
 
 # How to run
 
-
+> Reddit-Sentiment-Analysis-withVisualization.py
