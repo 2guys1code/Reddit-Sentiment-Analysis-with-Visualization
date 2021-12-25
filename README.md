@@ -8,7 +8,7 @@ determines the sentiment score of the individual posts. The results are stored i
 Furthermore, the program lets the user select the search term, the subbreddit (s)he wishes to search on, and a date range. 
 The number of posts extracted are set per default to 100, but can be changed up to 500. 
 
-# How to run
+# How to run:
 
 ```
 Reddit-Sentiment-Analysis-withVisualization.py
