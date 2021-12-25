@@ -201,9 +201,9 @@ plt.title('Sentiment Analysis')
 plt.show()
 
 
-print("This second graph shows the same data in a different plot.")
-
 #Second plot
+
+print("This second graph shows the same data in a different plot.")
 
 #Figure Size
 fig = plt.figure(figsize=(20, 5))
