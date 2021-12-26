@@ -2,7 +2,8 @@
 # Name: Reddit-Sentiment-Analysis-with-Visualization.py
 # Purpose: Pulls data from Reddit. Runs a sentiment analyis over the posts from Reddit. Renders a graphical illustration.
 #
-# Author(s):    David & Dean
+# Author(s):    amileaminute (David Probst, 17-609-546) 
+#               CookieMonster (Dean Vukovic, 16-620-544)
 #
 # Created:      24/12/2021
 # 
